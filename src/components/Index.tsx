@@ -136,6 +136,7 @@ class Input extends React.Component<InputProps, { type: string }> {
       preFormatter,
       sufFormatter,
       inputRef,
+      onCheck,
       ...rest
     } = this.props
     return this.state.type !== 'textarea' ? (
