@@ -8,12 +8,14 @@ declare enum ValidateTiming {
   Suf = 1,
 }
 
-declare type Validator = (val: string) => boolean
+declare type ErrorText = string
+declare type Validator = (val: string) => ErrorText
 declare type Formatter = (val: string) => string
 
 interface CheckInfo {
   pristine: boolean
   valid: boolean
+  errorText: string
 }
 
 declare type InputElType = HTMLTextAreaElement & HTMLInputElement
@@ -71,6 +73,7 @@ declare class Input extends React.Component<
 export default Input
 export {
   CheckInfo,
+  ErrorText,
   Formatter,
   InputElType,
   InputProps,

@@ -8,12 +8,14 @@ export enum ValidateTiming {
   Suf,
 }
 
-export type Validator = (val: string) => boolean
+export type ErrorText = string
+export type Validator = (val: string) => ErrorText
 export type Formatter = (val: string) => string
 
 export interface CheckInfo {
   pristine: boolean
   valid: boolean
+  errorText: string
 }
 
 export type InputElType = HTMLTextAreaElement & HTMLInputElement
@@ -92,12 +94,13 @@ class Input extends React.Component<InputProps, { type: string }> {
   private validator(val: string) {
     const { validator, onCheck } = this.props
     this.pristine = false
-    this.valid = validator ? validator(val) : true
+    const errorText = validator ? validator(val) : ''
+    this.valid = !errorText
     this.value = val
 
     if (onCheck) {
       const { pristine, valid } = this
-      onCheck({ pristine, valid })
+      onCheck({ pristine, valid, errorText })
     }
 
     this.setState({ type: this.type() })
