@@ -48,7 +48,7 @@ declare type InputProps = InputTypeProps & {
   sufFormatter?: Formatter
 }
 
-declare class Input extends React.Component<
+declare class ReactInput extends React.Component<
   InputProps,
   {
     type: string
@@ -70,7 +70,7 @@ declare class Input extends React.Component<
   render(): JSX.Element
 }
 
-export default Input
+export default ReactInput
 export {
   CheckInfo,
   ErrorText,

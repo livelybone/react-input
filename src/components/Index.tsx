@@ -50,7 +50,7 @@ export type InputProps = InputTypeProps & {
   sufFormatter?: Formatter
 }
 
-class Input extends React.Component<InputProps, { type: string }> {
+class ReactInput extends React.Component<InputProps, { type: string }> {
   private pristine: boolean = true
   private valid: boolean = true
   private value: string = ''
@@ -113,10 +113,11 @@ class Input extends React.Component<InputProps, { type: string }> {
       ev.target.value = preFormatter(ev.target.value)
     }
     if (oldVal !== ev.target.value) {
+      if (onChange) onChange(ev)
+
       if (this.validateTiming === ValidateTiming.Pre) {
         this.validator(ev.target.value)
       }
-      if (onChange) onChange(ev)
     }
   }
 
@@ -125,10 +126,11 @@ class Input extends React.Component<InputProps, { type: string }> {
     if (sufFormatter) {
       ev.target.value = sufFormatter(ev.target.value)
     }
+    if (onBlur) onBlur(ev)
+
     if (this.validateTiming === ValidateTiming.Suf) {
       this.validator(ev.target.value)
     }
-    if (onBlur) onBlur(ev)
   }
 
   render() {
@@ -163,4 +165,4 @@ class Input extends React.Component<InputProps, { type: string }> {
   }
 }
 
-export default Input
+export default ReactInput
