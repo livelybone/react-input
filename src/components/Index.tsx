@@ -53,11 +53,12 @@ export type InputProps = InputTypeProps & {
 class ReactInput extends React.Component<InputProps, { type: string }> {
   private pristine: boolean = true
   private valid: boolean = true
-  private value: string = ''
+  private oldValue: string = ''
 
   constructor(props: InputProps) {
     super(props)
     this.state = { type: this.type() }
+    this.oldValue = (props.value || props.defaultValue || '') as string
   }
 
   private get autoComplete() {
@@ -72,14 +73,14 @@ class ReactInput extends React.Component<InputProps, { type: string }> {
       autoComplete,
       pristine,
       valid,
-      value,
+      oldValue,
     } = this
 
     if (type === 'textarea') return 'textarea'
 
     if (
       type === 'password' &&
-      ((autoComplete === 'off' && ((!pristine || !valid) && value)) ||
+      ((autoComplete === 'off' && ((!pristine || !valid) && oldValue)) ||
         autoComplete === 'on')
     )
       return 'password'
@@ -96,7 +97,7 @@ class ReactInput extends React.Component<InputProps, { type: string }> {
     this.pristine = false
     const errorText = validator ? validator(val) : ''
     this.valid = !errorText
-    this.value = val
+    this.oldValue = val
 
     if (onCheck) {
       const { pristine, valid } = this
@@ -108,7 +109,7 @@ class ReactInput extends React.Component<InputProps, { type: string }> {
 
   private onChange(ev: React.ChangeEvent<InputElType>) {
     const { preFormatter, onChange } = this.props
-    const oldVal = this.value
+    const oldVal = this.oldValue
     if (preFormatter) {
       ev.target.value = preFormatter(ev.target.value)
     }

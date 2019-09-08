@@ -56,7 +56,7 @@ declare class ReactInput extends React.Component<
 > {
   private pristine
   private valid
-  private value
+  private oldValue
 
   constructor(props: InputProps)
 
