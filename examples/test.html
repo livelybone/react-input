@@ -7,7 +7,6 @@
   <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
   <script src="../lib/umd/index.js"></script>
-  <link rel="stylesheet" src="../lib/css/index.css">
 </head>
 <body>
 <div id="module"></div>
@@ -21,7 +20,6 @@ function Comp(props) {
   const ref = React.useRef(null)
   const [state, setState] = React.useState({ value: '' })
 
-  console.log(ref.current)
   return cr(
     'div',
     null,
@@ -30,6 +28,7 @@ function Comp(props) {
       autoComplete: 'off',
       // ref: ref,
       inputRef: ref,
+      value: state.value,
       preFormatter: (val) => val.replace(/\d+/g, ''),
       onChange: (ev) => {
         console.log(ev.target.value)
