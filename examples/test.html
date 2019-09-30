@@ -10,6 +10,7 @@
 </head>
 <body>
 <div id="module"></div>
+<button type="submit" onClick="alert('提交')">提交</button>
 
 <script>
 var module = document.getElementById('module')
@@ -23,18 +24,25 @@ function Comp(props) {
   return cr(
     'div',
     null,
-    cr(ReactInput.default, {
-      type: 'textarea',
-      autoComplete: 'off',
-      // ref: ref,
-      inputRef: ref,
-      value: state.value,
-      preFormatter: (val) => val.replace(/\d+/g, ''),
-      onChange: (ev) => {
-        console.log(ev.target.value)
-        setState({ value: ev.target.value })
-      },
-    }),
+    [
+      cr(ReactInput.default, {
+        type: 'text',
+        autoComplete: 'off',
+        preFormatter: (val) => val.replace(/\d+/g, ''),
+      }),
+      cr(ReactInput.default, {
+        type: 'password',
+        autoComplete: 'new-password',
+        // ref: ref,
+        inputRef: ref,
+        value: state.value,
+        preFormatter: (val) => val.replace(/\d+/g, ''),
+        onChange: (ev) => {
+          console.log(ev.target.value)
+          setState({ value: ev.target.value })
+        },
+      }),
+    ],
   )
 }
 

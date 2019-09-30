@@ -64,7 +64,43 @@ class ReactInput extends React.Component<InputProps, { type: string }> {
   private get autoComplete() {
     /** autocomplete is default to 'on' */
     const { autoComplete } = this.props
-    return autoComplete === 'off' ? 'off' : 'on'
+    if (!autoComplete) return 'on'
+    return autoComplete
+  }
+
+  private get validateTiming() {
+    return this.props.validateTiming || ValidateTiming.Pre
+  }
+
+  render() {
+    const {
+      type,
+      validator,
+      validateTiming,
+      preFormatter,
+      sufFormatter,
+      inputRef,
+      onCheck,
+      ...rest
+    } = this.props
+    return this.state.type !== 'textarea' ? (
+      <input
+        {...rest}
+        ref={inputRef}
+        type={this.state.type}
+        autoComplete={this.autoComplete}
+        onChange={this.onChange.bind(this)}
+        onBlur={this.onBlur.bind(this)}
+      />
+    ) : (
+      <textarea
+        {...rest}
+        ref={inputRef}
+        autoComplete={this.autoComplete}
+        onChange={this.onChange.bind(this)}
+        onBlur={this.onBlur.bind(this)}
+      />
+    )
   }
 
   private type() {
@@ -80,16 +116,12 @@ class ReactInput extends React.Component<InputProps, { type: string }> {
 
     if (
       type === 'password' &&
-      ((autoComplete === 'off' && ((!pristine || !valid) && oldValue)) ||
+      ((autoComplete !== 'off' && ((!pristine || !valid) && oldValue)) ||
         autoComplete === 'on')
     )
       return 'password'
 
     return 'text'
-  }
-
-  private get validateTiming() {
-    return this.props.validateTiming || ValidateTiming.Pre
   }
 
   private validator(val: string) {
@@ -132,37 +164,6 @@ class ReactInput extends React.Component<InputProps, { type: string }> {
     if (this.validateTiming === ValidateTiming.Suf) {
       this.validator(ev.target.value)
     }
-  }
-
-  render() {
-    const {
-      type,
-      validator,
-      validateTiming,
-      preFormatter,
-      sufFormatter,
-      inputRef,
-      onCheck,
-      ...rest
-    } = this.props
-    return this.state.type !== 'textarea' ? (
-      <input
-        {...rest}
-        ref={inputRef}
-        type={this.state.type}
-        autoComplete={this.autoComplete}
-        onChange={this.onChange.bind(this)}
-        onBlur={this.onBlur.bind(this)}
-      />
-    ) : (
-      <textarea
-        {...rest}
-        ref={inputRef}
-        autoComplete={this.autoComplete}
-        onChange={this.onChange.bind(this)}
-        onBlur={this.onBlur.bind(this)}
-      />
-    )
   }
 }
 
