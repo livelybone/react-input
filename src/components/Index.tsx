@@ -58,7 +58,7 @@ class ReactInput extends React.Component<
   }
 
   render() {
-    const type = this.props.type
+    const type = this.props.type || 'text'
     return type !== 'textarea' ? (
       <input {...this.$props} type={type} />
     ) : (
