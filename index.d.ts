@@ -1,23 +1,5 @@
 import React, { LegacyRef } from 'react'
 
-/**
- * Timing of calling validator
- * */
-declare enum ValidateTiming {
-  Pre = 0,
-  Suf = 1,
-}
-
-declare type ErrorText = string
-declare type Validator = (val: string) => ErrorText
-declare type Formatter = (val: string) => string
-
-interface CheckInfo {
-  pristine: boolean
-  valid: boolean
-  errorText: string
-}
-
 declare type InputElType = HTMLTextAreaElement & HTMLInputElement
 declare type InputTypeProps = React.DetailedHTMLProps<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -30,22 +12,13 @@ declare type InputTypeProps = React.DetailedHTMLProps<
 declare type InputProps = InputTypeProps & {
   inputRef?: LegacyRef<InputElType>
   /**
-   * Default: ValidateTiming.Pre
+   * composition 事件触发时是否能引发 onChange 事件
+   *
+   * Indicator that control whether the onChange should be call when CompositionEvent trigger
+   *
+   * Default: false
    * */
-  validateTiming?: ValidateTiming
-  validator?: Validator
-  /**
-   * Emit check info of the component
-   * */
-  onCheck?: (checkInfo: CheckInfo) => void
-  /**
-   * Formatting when inputting
-   * */
-  preFormatter?: Formatter
-  /**
-   * Formatting at the end of inputting
-   * */
-  sufFormatter?: Formatter
+  shouldCompositionEventTriggerChangeEvent?: boolean
 }
 
 declare class ReactInput extends React.Component<
@@ -54,30 +27,19 @@ declare class ReactInput extends React.Component<
     type: string
   }
 > {
-  private pristine
-  private valid
   private oldValue
+  private isCompositionStart
 
   constructor(props: InputProps)
 
-  private readonly autoComplete
-  private type
-  private readonly validateTiming
-  private validator
-  private onChange
-  private onBlur
+  private readonly $props
 
   render(): JSX.Element
+
+  private onComposition
+  private onChange
+  private onBlur
 }
 
 export default ReactInput
-export {
-  CheckInfo,
-  ErrorText,
-  Formatter,
-  InputElType,
-  InputProps,
-  InputTypeProps,
-  ValidateTiming,
-  Validator,
-}
+export { InputElType, InputProps, InputTypeProps }

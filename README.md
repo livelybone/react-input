@@ -7,7 +7,7 @@
 
 > `pkg.module supported`, which means that you can apply tree-shaking in you project
 
-A react input component, realized input validator, formatter. `textarea` available
+A react input component, default to disabled change event when composition event triggered
 
 ## repository
 https://github.com/livelybone/react-input.git
@@ -37,18 +37,24 @@ See in [index.d.ts](./index.d.ts)
 
 ## Usage
 ```typescript jsx
+import React from 'react'
 import ReactInput from '@livelybone/react-input'
 
-const Comp = () => <ReactInput type="text" preFormatter={val => val.replace(/[^\d]+/g, '')}/>
+const Comp = () => {
+  return (
+    <ReactInput
+      type="text"
+      shouldCompositionEventTriggerChangeEvent={false}
+      onChange={(ev) => console.log('onChange', ev, ev.target.value, ev.type)}
+      onCompositionEnd={(ev) => {
+        console.log('onCompositionEnd', ev.target.value, ev)
+      }}
+    />
+  )
+}
 ```
 
 Use in html, see what your can use in [CDN: unpkg](https://unpkg.com/@livelybone/react-input/lib/umd/)
 ```html
 <script src="https://unpkg.com/@livelybone/react-input/lib/umd/index.js"></script>
-
-<script>
-const Input = window.ReactInput.default
-
-const Comp = () => <ReactInput type="text" preFormatter={val => val.replace(/[^\d]+/g, '')}/>
-</script>
 ```

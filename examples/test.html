@@ -25,22 +25,20 @@ function Comp(props) {
     'div',
     null,
     [
-      cr(ReactInput.default, {
-        type: 'text',
+      cr(ReactInput, {
+        type: 'textarea',
         autoComplete: 'off',
-        preFormatter: (val) => val.replace(/\d+/g, ''),
+        shouldCompositionEventTriggerChangeEvent: false,
+        onChange: (ev) => console.log('onChange', ev, ev.target.value, ev.type),
+        onCompositionEnd: (ev) => {
+          console.log('onCompositionEnd', ev.target.value, ev)
+        }
       }),
-      cr(ReactInput.default, {
+      cr(ReactInput, {
         type: 'password',
         autoComplete: 'new-password',
-        // ref: ref,
         inputRef: ref,
         value: state.value,
-        preFormatter: (val) => val.replace(/\d+/g, ''),
-        onChange: (ev) => {
-          console.log(ev.target.value)
-          setState({ value: ev.target.value })
-        },
       }),
     ],
   )
