@@ -23,21 +23,14 @@ export type InputProps = InputTypeProps & {
   shouldCompositionEventTriggerChangeEvent?: boolean
 }
 
-class ReactInput extends React.Component<InputProps, { type: string }> {
-  private oldValue: string = ''
-  private isCompositionStart: boolean = false
-
-  constructor(props: InputProps) {
-    super(props)
-    this.oldValue = (props.value || props.defaultValue || '') as string
-  }
+class ReactInput extends React.Component<InputProps> {
+  isCompositionStart: boolean = false
 
   private get $props() {
     const { type, inputRef, ...rest } = this.props
     return {
       ...rest,
       ref: inputRef,
-      onBlur: this.onBlur,
       onChange: this.onChange,
       onCompositionEnd: this.onComposition.bind(this, 'onCompositionEnd'),
       onCompositionStart: this.onComposition.bind(this, 'onCompositionStart'),
@@ -71,20 +64,12 @@ class ReactInput extends React.Component<InputProps, { type: string }> {
 
   private onChange = (ev: React.ChangeEvent<InputElType>) => {
     if (
-      this.props.shouldCompositionEventTriggerChangeEvent ||
-      !this.isCompositionStart
+      this.props.onChange &&
+      (this.props.shouldCompositionEventTriggerChangeEvent ||
+        !this.isCompositionStart)
     ) {
-      const { onChange } = this.props
-      const oldVal = this.oldValue
-      if (oldVal !== ev.target.value) {
-        if (onChange) onChange(ev)
-      }
+      this.props.onChange(ev)
     }
-  }
-
-  private onBlur = (ev: React.FocusEvent<InputElType>) => {
-    const { onBlur } = this.props
-    if (onBlur) onBlur(ev)
   }
 }
 

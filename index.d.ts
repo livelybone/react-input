@@ -21,24 +21,14 @@ declare type InputProps = InputTypeProps & {
   shouldCompositionEventTriggerChangeEvent?: boolean
 }
 
-declare class ReactInput extends React.Component<
-  InputProps,
-  {
-    type: string
-  }
-> {
-  private oldValue
-  private isCompositionStart
-
-  constructor(props: InputProps)
-
+declare class ReactInput extends React.Component<InputProps> {
+  isCompositionStart: boolean
   private readonly $props
 
   render(): JSX.Element
 
   private onComposition
   private onChange
-  private onBlur
 }
 
 export default ReactInput
