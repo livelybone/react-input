@@ -21,6 +21,7 @@ function Comp(props) {
   const ref = React.useRef(null)
   const [state, setState] = React.useState({ value: '' })
 
+
   return cr(
     'div',
     null,
@@ -29,18 +30,19 @@ function Comp(props) {
         type: 'textarea',
         autoComplete: 'off',
         shouldCompositionEventTriggerChangeEvent: false,
-        onChange: (ev) => console.log('onChange', ev, ev.target.value, ev.type),
-        onCompositionEnd: (ev) => {
-          console.log('onCompositionEnd', ev.target.value, ev)
+        value: state.value,
+        onChange: (ev) => {
+          console.log('onChange', ev, ev.target.value, ev.type);
+          setState({ value: ev.target.value })
         }
       }),
-      cr(ReactInput, {
-        type: 'password',
-        autoComplete: 'new-password',
-        inputRef: ref,
-        value: state.value,
-      }),
-    ],
+      // cr(ReactInput, {
+      //   type: 'password',
+      //   autoComplete: 'new-password',
+      //   inputRef: ref,
+      //   value: state.value,
+      // }),
+    ]
   )
 }
 

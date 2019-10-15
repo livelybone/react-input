@@ -21,9 +21,17 @@ declare type InputProps = InputTypeProps & {
   shouldCompositionEventTriggerChangeEvent?: boolean
 }
 
-declare class ReactInput extends React.Component<InputProps> {
-  isCompositionStart: boolean
+declare class ReactInput extends React.Component<
+  InputProps,
+  {
+    isCompositionStart: boolean
+  }
+> {
+  state: {
+    isCompositionStart: boolean
+  }
   private readonly $props
+  private readonly shouldCallChange
 
   render(): JSX.Element
 

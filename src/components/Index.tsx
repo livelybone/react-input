@@ -23,13 +23,25 @@ export type InputProps = InputTypeProps & {
   shouldCompositionEventTriggerChangeEvent?: boolean
 }
 
-class ReactInput extends React.Component<InputProps> {
-  isCompositionStart: boolean = false
+class ReactInput extends React.Component<
+  InputProps,
+  { isCompositionStart: boolean }
+> {
+  state = {
+    isCompositionStart: false,
+  }
 
   private get $props() {
-    const { type, inputRef, ...rest } = this.props
+    const {
+      value,
+      type,
+      inputRef,
+      shouldCompositionEventTriggerChangeEvent,
+      ...rest
+    } = this.props
     return {
       ...rest,
+      ...(this.shouldCallChange ? { value } : {}),
       ref: inputRef,
       onChange: this.onChange,
       onCompositionEnd: this.onComposition.bind(this, 'onCompositionEnd'),
@@ -38,8 +50,16 @@ class ReactInput extends React.Component<InputProps> {
     }
   }
 
+  private get shouldCallChange() {
+    return (
+      this.props.shouldCompositionEventTriggerChangeEvent ||
+      !this.state.isCompositionStart
+    )
+  }
+
   render() {
     const type = this.props.type
+    console.log(this.$props)
     return type !== 'textarea' ? (
       <input {...this.$props} type={type} />
     ) : (
@@ -57,17 +77,17 @@ class ReactInput extends React.Component<InputProps> {
     const eventHandler = this.props[eventName]
     if (eventHandler) eventHandler(ev)
 
-    this.isCompositionStart = eventName !== 'onCompositionEnd'
-
-    if (!this.isCompositionStart) this.onChange(ev as any)
+    const $ev = { ...ev }
+    this.setState(
+      { isCompositionStart: eventName !== 'onCompositionEnd' },
+      () => {
+        if (!this.state.isCompositionStart) this.onChange($ev as any)
+      },
+    )
   }
 
   private onChange = (ev: React.ChangeEvent<InputElType>) => {
-    if (
-      this.props.onChange &&
-      (this.props.shouldCompositionEventTriggerChangeEvent ||
-        !this.isCompositionStart)
-    ) {
+    if (this.props.onChange && this.shouldCallChange) {
       this.props.onChange(ev)
     }
   }
