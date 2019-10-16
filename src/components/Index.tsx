@@ -1,4 +1,4 @@
-import React, { LegacyRef } from 'react'
+import React from 'react'
 
 export type InputElType = HTMLTextAreaElement & HTMLInputElement
 
@@ -12,7 +12,8 @@ export type InputTypeProps = React.DetailedHTMLProps<
   >
 
 export type InputProps = InputTypeProps & {
-  inputRef?: LegacyRef<InputElType>
+  value?: string
+  inputRef?: (ref: InputElType) => any
   /**
    * composition 事件触发时是否能引发 onChange 事件
    *
@@ -23,13 +24,10 @@ export type InputProps = InputTypeProps & {
   shouldCompositionEventTriggerChangeEvent?: boolean
 }
 
-class ReactInput extends React.Component<
-  InputProps,
-  { isCompositionStart: boolean }
-> {
-  state = {
-    isCompositionStart: false,
-  }
+class ReactInput extends React.Component<InputProps> {
+  isCompositionStart: boolean = false
+  private $inputRef!: InputElType
+  private oldValue: string = ''
 
   private get $props() {
     const {
@@ -41,8 +39,12 @@ class ReactInput extends React.Component<
     } = this.props
     return {
       ...rest,
-      ...(this.shouldCallChange ? { value } : {}),
-      ref: inputRef,
+      value: undefined,
+      defaultValue: value,
+      ref: (ref: InputElType) => {
+        if (inputRef) inputRef(ref)
+        this.$inputRef = ref
+      },
       onChange: this.onChange,
       onCompositionEnd: this.onComposition.bind(this, 'onCompositionEnd'),
       onCompositionStart: this.onComposition.bind(this, 'onCompositionStart'),
@@ -53,16 +55,22 @@ class ReactInput extends React.Component<
   private get shouldCallChange() {
     return (
       this.props.shouldCompositionEventTriggerChangeEvent ||
-      !this.state.isCompositionStart
+      !this.isCompositionStart
     )
   }
 
   render() {
+    const props = this.$props
     const type = this.props.type || 'text'
+    const value = this.props.value || ''
+    if (this.shouldCallChange && this.oldValue !== value) {
+      if (this.$inputRef) this.$inputRef.value = value
+      this.oldValue = value
+    }
     return type !== 'textarea' ? (
-      <input {...this.$props} type={type} />
+      <input {...props} type={type} />
     ) : (
-      <textarea {...this.$props} />
+      <textarea {...props} />
     )
   }
 
@@ -73,16 +81,17 @@ class ReactInput extends React.Component<
       | 'onCompositionUpdate',
     ev: React.CompositionEvent<InputElType>,
   ) => {
+    ev.stopPropagation()
     const eventHandler = this.props[eventName]
     if (eventHandler) eventHandler(ev)
 
-    const $ev = { ...ev }
-    this.setState(
-      { isCompositionStart: eventName !== 'onCompositionEnd' },
-      () => {
-        if (!this.state.isCompositionStart) this.onChange($ev as any)
-      },
-    )
+    this.isCompositionStart = eventName !== 'onCompositionEnd'
+    if (!this.isCompositionStart) {
+      const $ev = { ...ev } as any
+      setTimeout(() => {
+        this.onChange($ev)
+      })
+    }
   }
 
   private onChange = (ev: React.ChangeEvent<InputElType>) => {

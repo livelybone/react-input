@@ -1,4 +1,4 @@
-import React, { LegacyRef } from 'react'
+import React from 'react'
 
 declare type InputElType = HTMLTextAreaElement & HTMLInputElement
 declare type InputTypeProps = React.DetailedHTMLProps<
@@ -10,7 +10,8 @@ declare type InputTypeProps = React.DetailedHTMLProps<
     HTMLInputElement
   >
 declare type InputProps = InputTypeProps & {
-  inputRef?: LegacyRef<InputElType>
+  value?: string
+  inputRef?: (ref: InputElType) => any
   /**
    * composition 事件触发时是否能引发 onChange 事件
    *
@@ -21,15 +22,10 @@ declare type InputProps = InputTypeProps & {
   shouldCompositionEventTriggerChangeEvent?: boolean
 }
 
-declare class ReactInput extends React.Component<
-  InputProps,
-  {
-    isCompositionStart: boolean
-  }
-> {
-  state: {
-    isCompositionStart: boolean
-  }
+declare class ReactInput extends React.Component<InputProps> {
+  isCompositionStart: boolean
+  private $inputRef
+  private oldValue
   private readonly $props
   private readonly shouldCallChange
 

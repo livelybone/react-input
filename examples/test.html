@@ -21,19 +21,28 @@ function Comp(props) {
   const ref = React.useRef(null)
   const [state, setState] = React.useState({ value: '' })
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      setState({value: '刘志平'})
+    }, 1000)
+  }, [])
 
   return cr(
     'div',
     null,
     [
       cr(ReactInput, {
-        type: 'textarea',
+        type: 'text',
         autoComplete: 'off',
         shouldCompositionEventTriggerChangeEvent: false,
         value: state.value,
         onChange: (ev) => {
           console.log('onChange', ev, ev.target.value, ev.type);
           setState({ value: ev.target.value })
+        },
+        onCompositionEnd: (ev) => {
+          console.log('onCompositionEnd', ev, ev.target.value, ev.type);
+          // setState({ value: ev.target.value })
         }
       }),
       // cr(ReactInput, {
