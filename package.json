@@ -25,12 +25,7 @@
     "react",
     "input",
     "textarea",
-    "validator",
-    "pre formatter",
-    "suf formatter",
-    "check",
-    "pristine",
-    "valid"
+    "chinese input mark"
   ],
   "author": "2631541504@qq.com",
   "license": "MIT",
