@@ -63,7 +63,7 @@ class ReactInput extends React.Component<InputProps> {
     const props = this.$props
     const type = this.props.type || 'text'
     const value = this.props.value || ''
-    if (this.shouldCallChange && this.oldValue !== value) {
+    if (this.shouldCallChange) {
       if (this.$inputRef) this.$inputRef.value = value
       this.oldValue = value
     }
