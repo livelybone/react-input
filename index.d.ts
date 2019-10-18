@@ -25,7 +25,6 @@ declare type InputProps = InputTypeProps & {
 declare class ReactInput extends React.Component<InputProps> {
   isCompositionStart: boolean
   private $inputRef
-  private oldValue
   private readonly $props
   private readonly shouldCallChange
 

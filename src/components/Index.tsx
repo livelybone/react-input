@@ -27,7 +27,6 @@ export type InputProps = InputTypeProps & {
 class ReactInput extends React.Component<InputProps> {
   isCompositionStart: boolean = false
   private $inputRef!: InputElType
-  private oldValue: string = ''
 
   private get $props() {
     const {
@@ -62,10 +61,9 @@ class ReactInput extends React.Component<InputProps> {
   render() {
     const props = this.$props
     const type = this.props.type || 'text'
-    const value = this.props.value || ''
-    if (this.shouldCallChange) {
+    const value = this.props.value
+    if (this.shouldCallChange && value !== undefined) {
       if (this.$inputRef) this.$inputRef.value = value
-      this.oldValue = value
     }
     return type !== 'textarea' ? (
       <input {...props} type={type} />
