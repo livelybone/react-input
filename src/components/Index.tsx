@@ -13,7 +13,6 @@ export type InputTypeProps = React.DetailedHTMLProps<
 
 export type InputProps = InputTypeProps & {
   value?: string
-  inputRef?: (ref: InputElType) => any
   /**
    * composition 事件触发时是否能引发 onChange 事件
    *
@@ -26,13 +25,12 @@ export type InputProps = InputTypeProps & {
 
 class ReactInput extends React.Component<InputProps> {
   isCompositionStart: boolean = false
-  private $inputRef!: InputElType
+  inputEl!: InputElType
 
   private get $props() {
     const {
       value,
       type,
-      inputRef,
       shouldCompositionEventTriggerChangeEvent,
       ...rest
     } = this.props
@@ -41,8 +39,7 @@ class ReactInput extends React.Component<InputProps> {
       value: undefined,
       defaultValue: value,
       ref: (ref: InputElType) => {
-        if (inputRef) inputRef(ref)
-        this.$inputRef = ref
+        this.inputEl = ref
       },
       onChange: this.onChange,
       onCompositionEnd: this.onComposition.bind(this, 'onCompositionEnd'),
@@ -63,7 +60,7 @@ class ReactInput extends React.Component<InputProps> {
     const type = this.props.type || 'text'
     const value = this.props.value
     if (this.shouldCallChange && value !== undefined) {
-      if (this.$inputRef) this.$inputRef.value = value
+      if (this.inputEl) this.inputEl.value = value
     }
     return type !== 'textarea' ? (
       <input {...props} type={type} />

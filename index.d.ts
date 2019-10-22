@@ -11,7 +11,6 @@ declare type InputTypeProps = React.DetailedHTMLProps<
   >
 declare type InputProps = InputTypeProps & {
   value?: string
-  inputRef?: (ref: InputElType) => any
   /**
    * composition 事件触发时是否能引发 onChange 事件
    *
@@ -24,7 +23,7 @@ declare type InputProps = InputTypeProps & {
 
 declare class ReactInput extends React.Component<InputProps> {
   isCompositionStart: boolean
-  private $inputRef
+  inputEl: InputElType
   private readonly $props
   private readonly shouldCallChange
 
