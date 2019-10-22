@@ -11,7 +11,9 @@ export type InputTypeProps = React.DetailedHTMLProps<
     HTMLInputElement
   >
 
-export type InputProps = InputTypeProps & {
+type Remove<O, Keys> = { [key in Exclude<keyof O, Keys>]?: O[key] }
+
+export type InputProps = Remove<InputTypeProps, 'ref'> & {
   value?: string
   /**
    * composition 事件触发时是否能引发 onChange 事件

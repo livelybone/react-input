@@ -9,7 +9,10 @@ declare type InputTypeProps = React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   >
-declare type InputProps = InputTypeProps & {
+declare type Remove<O, Keys> = {
+  [key in Exclude<keyof O, Keys>]?: O[key]
+}
+declare type InputProps = Remove<InputTypeProps, 'ref'> & {
   value?: string
   /**
    * composition 事件触发时是否能引发 onChange 事件
