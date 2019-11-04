@@ -57,13 +57,24 @@ class ReactInput extends React.Component<InputProps> {
     )
   }
 
+  componentDidUpdate(prevProps: any): void {
+    if (
+      this.shouldCallChange &&
+      (this.props.value !== undefined && this.props.value !== prevProps.value)
+    ) {
+      if (this.inputEl) this.inputEl.value = this.props.value
+    }
+  }
+
+  componentDidMount(): void {
+    if (this.shouldCallChange && this.props.value) {
+      if (this.inputEl) this.inputEl.value = this.props.value
+    }
+  }
+
   render() {
     const props = this.$props
     const type = this.props.type || 'text'
-    const value = this.props.value
-    if (this.shouldCallChange && value !== undefined) {
-      if (this.inputEl) this.inputEl.value = value
-    }
     return type !== 'textarea' ? (
       <input {...props} type={type} />
     ) : (
