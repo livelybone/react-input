@@ -33,12 +33,17 @@ class ReactInput extends React.Component<InputProps> {
     const {
       value,
       type,
+      autoComplete,
       shouldCompositionEventTriggerChangeEvent,
       ...rest
     } = this.props
     return {
       ...rest,
       value: undefined,
+      autoComplete:
+        type === 'password' && autoComplete === 'off'
+          ? 'new-password'
+          : autoComplete,
       defaultValue: value,
       ref: (ref: InputElType) => {
         this.inputEl = ref
