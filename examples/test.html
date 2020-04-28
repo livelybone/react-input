@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ReactInput</title>
-  <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@16/umd/react.development.js" crossorigin></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@16/umd/react-dom.development.js" crossorigin></script>
   <script src="../lib/umd/index.js"></script>
 </head>
 <body>
@@ -20,6 +20,7 @@ var cr = React.createElement
 function Comp(props) {
   const ref = React.useRef(null)
   const [state, setState] = React.useState({ value: '' })
+  const [state1, setState1] = React.useState({ value: '' })
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -38,7 +39,8 @@ function Comp(props) {
         value: state.value,
         onChange: (ev) => {
           console.log('onChange', ev, ev.target.value, ev.type);
-          setState({ value: ev.target.value })
+          // setState({ value: ev.target.value })
+          setState1({ value: ev.target.value })
         },
         onCompositionEnd: (ev) => {
           console.log('onCompositionEnd', ev, ev.target.value, ev.type);

@@ -26,7 +26,7 @@ export type InputProps = Remove<InputTypeProps, 'ref'> & {
 }
 
 class ReactInput extends React.Component<InputProps> {
-  isCompositionStart: boolean = false
+  isCompositionUpdate: boolean = false
   inputEl!: InputElType
 
   private get $props() {
@@ -58,22 +58,23 @@ class ReactInput extends React.Component<InputProps> {
   private get shouldCallChange() {
     return (
       this.props.shouldCompositionEventTriggerChangeEvent ||
-      !this.isCompositionStart
+      !this.isCompositionUpdate
     )
   }
 
   componentDidUpdate(prevProps: any): void {
     if (
       this.shouldCallChange &&
-      (this.props.value !== undefined && this.props.value !== prevProps.value)
+      this.inputEl &&
+      this.props.value !== undefined
     ) {
-      if (this.inputEl) this.inputEl.value = this.props.value
+      this.inputEl.value = this.props.value
     }
   }
 
   componentDidMount(): void {
-    if (this.shouldCallChange && this.props.value) {
-      if (this.inputEl) this.inputEl.value = this.props.value
+    if (this.shouldCallChange && this.inputEl && this.props.value) {
+      this.inputEl.value = this.props.value
     }
   }
 
@@ -98,8 +99,8 @@ class ReactInput extends React.Component<InputProps> {
     const eventHandler = this.props[eventName]
     if (eventHandler) eventHandler(ev)
 
-    this.isCompositionStart = eventName !== 'onCompositionEnd'
-    if (!this.isCompositionStart) {
+    this.isCompositionUpdate = eventName !== 'onCompositionEnd'
+    if (!this.isCompositionUpdate) {
       const $ev = { ...ev } as any
       setTimeout(() => {
         this.onChange($ev)
