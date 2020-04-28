@@ -25,10 +25,16 @@ declare type InputProps = Remove<InputTypeProps, 'ref'> & {
 }
 
 declare class ReactInput extends React.Component<InputProps> {
-  isCompositionStart: boolean
+  isCompositionUpdate: boolean
   inputEl: InputElType
-  private readonly $props
-  private readonly shouldCallChange
+
+  private get $props()
+
+  private get shouldCallChange()
+
+  componentDidUpdate(prevProps: any): void
+
+  componentDidMount(): void
 
   render(): JSX.Element
 
