@@ -2,13 +2,10 @@ import React from 'react'
 
 declare type InputElType = HTMLTextAreaElement & HTMLInputElement
 declare type InputTypeProps = React.DetailedHTMLProps<
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  HTMLTextAreaElement
+  React.TextareaHTMLAttributes<InputElType>,
+  InputElType
 > &
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >
+  React.DetailedHTMLProps<React.InputHTMLAttributes<InputElType>, InputElType>
 declare type Remove<O, Keys> = {
   [key in Exclude<keyof O, Keys>]?: O[key]
 }

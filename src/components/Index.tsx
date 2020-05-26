@@ -3,18 +3,16 @@ import React from 'react'
 export type InputElType = HTMLTextAreaElement & HTMLInputElement
 
 export type InputTypeProps = React.DetailedHTMLProps<
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  HTMLTextAreaElement
+  React.TextareaHTMLAttributes<InputElType>,
+  InputElType
 > &
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >
+  React.DetailedHTMLProps<React.InputHTMLAttributes<InputElType>, InputElType>
 
 type Remove<O, Keys> = { [key in Exclude<keyof O, Keys>]?: O[key] }
 
 export type InputProps = Remove<InputTypeProps, 'ref'> & {
   value?: string
+
   /**
    * composition 事件触发时是否能引发 onChange 事件
    *
